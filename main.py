@@ -7,7 +7,7 @@ import pyautogui
 #face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 # https://github.com/Itseez/opencv/blob/master/data/haarcascades/haarcascade_eye.xml
 #eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-hand = cv2.CascadeClassifier('hand.xml')
+hand = cv2.CascadeClassifier('testhand.xml')
 cap = cv2.VideoCapture(0)
 
 while 1:
@@ -18,7 +18,7 @@ while 1:
 
     for(x, y, w, h) in hands:
         cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
-        pyautogui.moveTo(x, y)
+        #pyautogui.moveTo(x, y)
     cv2.imshow('Frame', img)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
