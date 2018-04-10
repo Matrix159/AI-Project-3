@@ -3,8 +3,8 @@ import numpy as np
 import math
 import pyautogui
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH,1920)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT,1080)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 pyautogui.FAILSAFE = False
 previousX = 0
 previousY = 0
@@ -43,16 +43,15 @@ while cap.isOpened():
     # find contour with max area
     cnt = max(contours, key=lambda x: cv2.contourArea(x))
 
-    # create bounding rectangle around the contour (can skip below two lines)
+    # create bounding rectangle around the contour and detect points for mouse movement
     x, y, w, h = cv2.boundingRect(cnt)
     previousX = previousX - x
     previousY = previousY - y
     cv2.rectangle(crop_img, (x, y), (x + w, y + h), (0, 0, 255), 0)
-    pyautogui.moveRel(previousX*6, previousY*6)
+
     # finding convex hull
     hull = cv2.convexHull(cnt)
-    previousX = x
-    previousY = y
+
 
     # drawing contours
     drawing = np.zeros(crop_img.shape, np.uint8)
@@ -87,7 +86,7 @@ while cap.isOpened():
         # ignore angles > 90 and highlight rest with red dots
         if angle <= 90:
             count_defects += 1
-            cv2.circle(crop_img, far, 1, [0, 0, 255], -1)
+            cv2.circle(crop_img, far, 10, [0, 0, 255], -1)
         # dist = cv2.pointPolygonTest(cnt,far,True)
 
         # draw a line from start to end i.e. the convex points (finger tips)
@@ -95,27 +94,30 @@ while cap.isOpened():
         cv2.line(crop_img, start, end, [0, 255, 0], 2)
         # cv2.circle(crop_img,far,5,[0,0,255],-1)
 
+    move = True
     # define actions required
     if count_defects == 1:
         cv2.putText(img, "One", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
     elif count_defects == 2:
-        str = "Two"
-        cv2.putText(img, str, (5, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
+        cv2.putText(img, "Two", (5, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
     elif count_defects == 3:
-        cv2.putText(img, "", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
-    elif count_defects == 4:
         cv2.putText(img, "Three", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
-    elif count_defects == 6:
+        move = False
+    elif count_defects == 4:
+        cv2.putText(img, "Four", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+    elif count_defects == 5:
         cv2.putText(img, "Five", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
     else:
-        cv2.putText(img, "Four", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
+        cv2.putText(img, "Six", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, 2)
 
+    # If thumb is not moved to palm then move cursor
+    if move:
+        pyautogui.moveRel(previousX * 8, -previousY * 8)
+    previousX = x
+    previousY = y
 
-    #cv2.namedWindow("test", cv2.WINDOW_AUTOSIZE)
-    #cv2.resizeWindow("test", 1920, 1080)
-    cv2.imshow("test", img)
     # show appropriate images in windows
-    #cv2.imshow('Gesture', img)
+    cv2.imshow('Gesture', img)
     all_img = np.hstack((drawing, crop_img))
     cv2.imshow('Contours', all_img)
 
