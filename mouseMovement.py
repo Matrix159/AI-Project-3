@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import math
 import pyautogui
+# Initialization code for capture heigh and width and pyautogui settings
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
