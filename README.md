@@ -6,6 +6,8 @@ Chris Gonzalez
 
 Mike Ames
 
+Matt Pairitz
+
 
 
 Installation requirements:
