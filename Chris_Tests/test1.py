@@ -4,7 +4,9 @@ import pyautogui
 
 # multiple cascades: https://github.com/Itseez/opencv/tree/master/data/haarcascades
 
+# For Fist: https://github.com/Aravindlivewire/Opencv/blob/master/haarcascade/aGest.xml
 fist_cascade = cv2.CascadeClassifier('aGest.xml')
+# For Palm: https://github.com/Aravindlivewire/Opencv/blob/master/haarcascade/palm.xml
 palm_cascade = cv2.CascadeClassifier('palm.xml')
 
 cap = cv2.VideoCapture(0)
